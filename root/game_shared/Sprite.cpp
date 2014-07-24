@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2001, Valve LLC, All rights reserved. ============
 //
 // Purpose: Implements visual effects entities: sprites, beams, bubbles, etc.
 //
@@ -13,7 +13,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-const float MAX_SPRITE_SCALE = 8.0f;
+const float MAX_SPRITE_SCALE = 99.0f; // was 8.0f before.
 
 LINK_ENTITY_TO_CLASS( env_sprite, CSprite );
 #if !defined( CLIENT_DLL )
