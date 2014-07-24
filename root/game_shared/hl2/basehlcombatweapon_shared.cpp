@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
+//========= Copyright ï¿½ 1996-2001, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -99,9 +99,12 @@ bool CBaseHLCombatWeapon::Ready( void )
 void CBaseHLCombatWeapon::WeaponIdle( void )
 {
 	CHL2_Player	*pPlayer = dynamic_cast<CHL2_Player *>(GetOwner());
-
+	
+	// gaben, srsly? Sprint is walking so fuck off, same anim. was ACT_VM_SPRINT_IDLE before.
+	//commenting code, will load n compile faster.
 	//If we're sprinting, then put the gun away
-	if ( ( SelectWeightedSequence( ACT_VM_SPRINT_IDLE ) != ACTIVITY_NOT_AVAILABLE ) && pPlayer->IsSprinting() )
+	
+/*	if ( ( SelectWeightedSequence( ACT_VM_SPRINT_IDLE ) != ACTIVITY_NOT_AVAILABLE ) && pPlayer->IsSprinting() )
 	{
 		if ( HasWeaponIdleTimeElapsed() || ( GetActivity() != ACT_VM_SPRINT_IDLE ) )
 		{
@@ -110,6 +113,7 @@ void CBaseHLCombatWeapon::WeaponIdle( void )
 
 		return;
 	}
+*/
 
 	//See if we should idle high or low
 	if ( m_bLowered && ( m_flRaiseTime > gpGlobals->curtime ))
