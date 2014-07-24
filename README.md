@@ -5,6 +5,7 @@ A recreation (and working version) of the Half-Life 2 beta, complete in the orig
 
 Currently being worked on by:
 [somewhatparadoxed](https://github.com/somewhatparadoxed)
+
 [AVunit-anon](https://github.com/AVunit-anon)
 
 Frequently asked questions (and answers!):
