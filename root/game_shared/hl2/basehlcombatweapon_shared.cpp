@@ -1,6 +1,6 @@
-//========= Copyright � 1996-2001, Valve LLC, All rights reserved. ============
+//========= Copyright © 1996-2001, Valve LLC, All rights reserved. ============
 //
-// Purpose: 
+// Purpose:
 //
 //=============================================================================
 
@@ -15,9 +15,9 @@ IMPLEMENT_NETWORKCLASS_ALIASED( BaseHLCombatWeapon , DT_BaseHLCombatWeapon )
 
 BEGIN_NETWORK_TABLE( CBaseHLCombatWeapon , DT_BaseHLCombatWeapon )
 #if !defined( CLIENT_DLL )
-//	SendPropInt( SENDINFO( m_bReflectViewModelAnimations ), 1, SPROP_UNSIGNED ),
+// SendPropInt( SENDINFO( m_bReflectViewModelAnimations ), 1, SPROP_UNSIGNED ),
 #else
-//	RecvPropInt( RECVINFO( m_bReflectViewModelAnimations ) ),
+// RecvPropInt( RECVINFO( m_bReflectViewModelAnimations ) ),
 #endif
 END_NETWORK_TABLE()
 
@@ -29,8 +29,8 @@ END_NETWORK_TABLE()
 //---------------------------------------------------------
 BEGIN_DATADESC( CBaseHLCombatWeapon )
 
-	DEFINE_FIELD( CBaseHLCombatWeapon, m_bLowered,			FIELD_BOOLEAN ),
-	DEFINE_FIELD( CBaseHLCombatWeapon, m_flRaiseTime,		FIELD_TIME ),
+DEFINE_FIELD( CBaseHLCombatWeapon, m_bLowered,	FIELD_BOOLEAN ),
+DEFINE_FIELD( CBaseHLCombatWeapon, m_flRaiseTime,	FIELD_TIME ),
 
 END_DATADESC()
 
@@ -46,31 +46,31 @@ END_PREDICTION_DATA()
 //-----------------------------------------------------------------------------
 bool CBaseHLCombatWeapon::Lower( void )
 {
-	//Don't bother if we don't have the animation
-	if ( SelectWeightedSequence( ACT_VM_IDLE_LOWERED ) == ACTIVITY_NOT_AVAILABLE )
-		return false;
+//Don't bother if we don't have the animation
+if ( SelectWeightedSequence( ACT_VM_IDLE_LOWERED ) == ACTIVITY_NOT_AVAILABLE )
+return false;
 
-	//See if we've already lowered the weapon
-	if ( m_bLowered )
-	{
-		//Push the timer out a bit
-		m_flRaiseTime = gpGlobals->curtime + 0.5f;
+//See if we've already lowered the weapon
+if ( m_bLowered )
+{
+//Push the timer out a bit
+m_flRaiseTime = gpGlobals->curtime + 0.5f;
 
-		return true;
-	}
+return true;
+}
 
-	m_bLowered = true;
+m_bLowered = true;
 
-	//Start the animation
-	if ( GetSequence() != LookupSequence( "ACT_VM_IDLE_LOWERED" ) )
-	{
-		SendWeaponAnim( ACT_VM_IDLE_LOWERED );
-	}
+//Start the animation
+if ( GetSequence() != LookupSequence( "ACT_VM_IDLE_LOWERED" ) )
+{
+SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+}
 
-	//Don't raise for a little while
-	m_flRaiseTime = gpGlobals->curtime + 1.0f;
+//Don't raise for a little while
+m_flRaiseTime = gpGlobals->curtime + 1.0f;
 
-	return true;
+return true;
 }
 
 //-----------------------------------------------------------------------------
@@ -79,17 +79,17 @@ bool CBaseHLCombatWeapon::Lower( void )
 //-----------------------------------------------------------------------------
 bool CBaseHLCombatWeapon::Ready( void )
 {
-	//Don't bother if we don't have the animation
-	if ( SelectWeightedSequence( ACT_VM_IDLE ) == ACTIVITY_NOT_AVAILABLE )
-		return false;
+//Don't bother if we don't have the animation
+if ( SelectWeightedSequence( ACT_VM_IDLE ) == ACTIVITY_NOT_AVAILABLE )
+return false;
 
-	//Raise immediately if we're currently lowered
-	if ( m_bLowered )
-	{
-		m_flRaiseTime = gpGlobals->curtime;
-	}
-	
-	return true;
+//Raise immediately if we're currently lowered
+if ( m_bLowered )
+{
+m_flRaiseTime = gpGlobals->curtime;
+}
+
+return true;
 }
 
 
@@ -98,49 +98,45 @@ bool CBaseHLCombatWeapon::Ready( void )
 //-----------------------------------------------------------------------------
 void CBaseHLCombatWeapon::WeaponIdle( void )
 {
-	CHL2_Player	*pPlayer = dynamic_cast<CHL2_Player *>(GetOwner());
-	
-	// gaben, srsly? Sprint is walking so fuck off, same anim. was ACT_VM_SPRINT_IDLE before.
-	//commenting code, will load n compile faster.
-	//If we're sprinting, then put the gun away
-	
-/*	if ( ( SelectWeightedSequence( ACT_VM_SPRINT_IDLE ) != ACTIVITY_NOT_AVAILABLE ) && pPlayer->IsSprinting() )
-	{
-		if ( HasWeaponIdleTimeElapsed() || ( GetActivity() != ACT_VM_SPRINT_IDLE ) )
-		{
-			SendWeaponAnim( ACT_VM_SPRINT_IDLE );
-		}
+CHL2_Player	*pPlayer = dynamic_cast<CHL2_Player *>(GetOwner());
 
-		return;
-	}
-*/
+//If we're sprinting, then put the gun away
+if ( ( SelectWeightedSequence( ACT_VM_SPRINT_IDLE ) != ACTIVITY_NOT_AVAILABLE ) && pPlayer->IsSprinting() )
+{
+if ( HasWeaponIdleTimeElapsed() || ( GetActivity() != ACT_VM_SPRINT_IDLE ) )
+{
+SendWeaponAnim( ACT_VM_SPRINT_IDLE );
+}
 
-	//See if we should idle high or low
-	if ( m_bLowered && ( m_flRaiseTime > gpGlobals->curtime ))
-	{
-		//Keep idling low
-		if ( HasWeaponIdleTimeElapsed() )
-		{
-			SendWeaponAnim( ACT_VM_IDLE_LOWERED );
-		}
-	}
-	else
-	{
-		//Idle high
-		if ( m_bLowered || HasWeaponIdleTimeElapsed() )
-		{
-			SendWeaponAnim( ACT_VM_IDLE );
-			m_bLowered = false;
-		}
-	}
+return;
+}
+
+//See if we should idle high or low
+if ( m_bLowered && ( m_flRaiseTime > gpGlobals->curtime ))
+{
+//Keep idling low
+if ( HasWeaponIdleTimeElapsed() )
+{
+SendWeaponAnim( ACT_VM_IDLE_LOWERED );
+}
+}
+else
+{
+//Idle high
+if ( m_bLowered || HasWeaponIdleTimeElapsed() )
+{
+SendWeaponAnim( ACT_VM_IDLE );
+m_bLowered = false;
+}
+}
 }
 
 #if defined( CLIENT_DLL )
 
-#define	HL2_BOB_CYCLE_MIN	1.0f
-#define	HL2_BOB_CYCLE_MAX	0.45f
-#define	HL2_BOB			0.002f
-#define	HL2_BOB_UP		0.5f
+#define HL2_BOB_CYCLE_MIN 1.0f
+#define HL2_BOB_CYCLE_MAX 0.45f
+#define HL2_BOB 0.002f
+#define HL2_BOB_UP 0.5f
 
 float	g_lateralBob;
 float	g_verticalBob;
@@ -158,104 +154,104 @@ static ConVar	v_iroll_level( "v_iroll_level", "0.1"/*, FCVAR_UNREGISTERED*/ );
 static ConVar	v_ipitch_level( "v_ipitch_level", "0.3"/*, FCVAR_UNREGISTERED*/ );
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : float
 //-----------------------------------------------------------------------------
 float CBaseHLCombatWeapon::CalcViewmodelBob( void )
 {
-	static	float bobtime;
-	static	float lastbobtime;
-	float	cycle;
-	
-	CBasePlayer *player = ToBasePlayer( GetOwner() );
-	//Assert( player );
+static	float bobtime;
+static	float lastbobtime;
+float	cycle;
 
-	//NOTENOTE: For now, let this cycle continue when in the air, because it snaps badly without it
+CBasePlayer *player = ToBasePlayer( GetOwner() );
+//Assert( player );
 
-	if ( ( !gpGlobals->frametime ) || ( player == NULL ) )
-	{
-		//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
-		return 0.0f;// just use old value
-	}
+//NOTENOTE: For now, let this cycle continue when in the air, because it snaps badly without it
 
-	//Find the speed of the player
-	float speed = player->GetLocalVelocity().Length2D();
+if ( ( !gpGlobals->frametime ) || ( player == NULL ) )
+{
+//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
+return 0.0f;// just use old value
+}
 
-	//FIXME: This maximum speed value must come from the server.
-	//		 MaxSpeed() is not sufficient for dealing with sprinting - jdw
+//Find the speed of the player
+float speed = player->GetLocalVelocity().Length2D();
 
-	speed = clamp( speed, -320, 320 );
+//FIXME: This maximum speed value must come from the server.
+// MaxSpeed() is not sufficient for dealing with sprinting - jdw
 
-	float bob_offset = RemapVal( speed, 0, 320, 0.0f, 1.0f );
-	
-	bobtime += ( gpGlobals->curtime - lastbobtime ) * bob_offset;
-	lastbobtime = gpGlobals->curtime;
+speed = clamp( speed, -320, 320 );
 
-	//Calculate the vertical bob
-	cycle = bobtime - (int)(bobtime/HL2_BOB_CYCLE_MAX)*HL2_BOB_CYCLE_MAX;
-	cycle /= HL2_BOB_CYCLE_MAX;
+float bob_offset = RemapVal( speed, 0, 320, 0.0f, 1.0f );
 
-	if ( cycle < HL2_BOB_UP )
-	{
-		cycle = M_PI * cycle / HL2_BOB_UP;
-	}
-	else
-	{
-		cycle = M_PI + M_PI*(cycle-HL2_BOB_UP)/(1.0 - HL2_BOB_UP);
-	}
-	
-	g_verticalBob = speed*0.005f;
-	g_verticalBob = g_verticalBob*0.3 + g_verticalBob*0.7*sin(cycle);
+bobtime += ( gpGlobals->curtime - lastbobtime ) * bob_offset;
+lastbobtime = gpGlobals->curtime;
 
-	g_verticalBob = clamp( g_verticalBob, -7.0f, 4.0f );
+//Calculate the vertical bob
+cycle = bobtime - (int)(bobtime/HL2_BOB_CYCLE_MAX)*HL2_BOB_CYCLE_MAX;
+cycle /= HL2_BOB_CYCLE_MAX;
 
-	//Calculate the lateral bob
-	cycle = bobtime - (int)(bobtime/HL2_BOB_CYCLE_MAX*2)*HL2_BOB_CYCLE_MAX*2;
-	cycle /= HL2_BOB_CYCLE_MAX*2;
+if ( cycle < HL2_BOB_UP )
+{
+cycle = M_PI * cycle / HL2_BOB_UP;
+}
+else
+{
+cycle = M_PI + M_PI*(cycle-HL2_BOB_UP)/(1.0 - HL2_BOB_UP);
+}
 
-	if ( cycle < HL2_BOB_UP )
-	{
-		cycle = M_PI * cycle / HL2_BOB_UP;
-	}
-	else
-	{
-		cycle = M_PI + M_PI*(cycle-HL2_BOB_UP)/(1.0 - HL2_BOB_UP);
-	}
+g_verticalBob = speed*0.005f;
+g_verticalBob = g_verticalBob*0.3 + g_verticalBob*0.7*sin(cycle);
 
-	g_lateralBob = speed*0.005f;
-	g_lateralBob = g_lateralBob*0.3 + g_lateralBob*0.7*sin(cycle);
-	g_lateralBob = clamp( g_lateralBob, -7.0f, 4.0f );
-	
-	//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
-	return 0.0f;
+g_verticalBob = clamp( g_verticalBob, -7.0f, 4.0f );
+
+//Calculate the lateral bob
+cycle = bobtime - (int)(bobtime/HL2_BOB_CYCLE_MAX*2)*HL2_BOB_CYCLE_MAX*2;
+cycle /= HL2_BOB_CYCLE_MAX*2;
+
+if ( cycle < HL2_BOB_UP )
+{
+cycle = M_PI * cycle / HL2_BOB_UP;
+}
+else
+{
+cycle = M_PI + M_PI*(cycle-HL2_BOB_UP)/(1.0 - HL2_BOB_UP);
+}
+
+g_lateralBob = speed*0.005f;
+g_lateralBob = g_lateralBob*0.3 + g_lateralBob*0.7*sin(cycle);
+g_lateralBob = clamp( g_lateralBob, -7.0f, 4.0f );
+
+//NOTENOTE: We don't use this return value in our case (need to restructure the calculation function setup!)
+return 0.0f;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : &origin - 
-//			&angles - 
-//			viewmodelindex - 
+// Purpose:
+// Input : &origin -
+// &angles -
+// viewmodelindex -
 //-----------------------------------------------------------------------------
 void CBaseHLCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &origin, QAngle &angles )
 {
-	Vector	forward, right;
-	AngleVectors( angles, &forward, &right, NULL );
+Vector	forward, right;
+AngleVectors( angles, &forward, &right, NULL );
 
-	CalcViewmodelBob();
+CalcViewmodelBob();
 
-	// Apply bob, but scaled down to 40%
-	VectorMA( origin, g_verticalBob * 0.1f, forward, origin );
-	
-	// Z bob a bit more
-	origin[2] += g_verticalBob * 0.1f;
-	
-	// bob the angles
-	angles[ ROLL ]	+= g_verticalBob * 0.5f;
-	angles[ PITCH ]	-= g_verticalBob * 0.4f;
+// Apply bob, but scaled down to 40%
+VectorMA( origin, g_verticalBob * 0.1f, forward, origin );
 
-	angles[ YAW ]	-= g_lateralBob  * 0.3f;
+// Z bob a bit more
+origin[2] += g_verticalBob * 0.1f;
 
-	VectorMA( origin, g_lateralBob * 0.8f, right, origin );
+// bob the angles
+angles[ ROLL ]	+= g_verticalBob * 0.5f;
+angles[ PITCH ]	-= g_verticalBob * 0.4f;
+
+angles[ YAW ]	-= g_lateralBob * 0.3f;
+
+VectorMA( origin, g_lateralBob * 0.8f, right, origin );
 }
 
 #else
@@ -263,14 +259,14 @@ void CBaseHLCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &or
 // Server stubs
 float CBaseHLCombatWeapon::CalcViewmodelBob( void )
 {
-	return 0.0f;
+return 0.0f;
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : &origin - 
-//			&angles - 
-//			viewmodelindex - 
+// Purpose:
+// Input : &origin -
+// &angles -
+// viewmodelindex -
 //-----------------------------------------------------------------------------
 void CBaseHLCombatWeapon::AddViewmodelBob( CBaseViewModel *viewmodel, Vector &origin, QAngle &angles )
 {
