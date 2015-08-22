@@ -1,7 +1,7 @@
 @rem
 @rem If necessary, do setlocal.
 @rem Then start the build.
-@rem
+@rem You need some old version of visual studio for this, idk.
 
 @if "%build_level%"=="" setlocal
 @call start_build %1 %2 %3
